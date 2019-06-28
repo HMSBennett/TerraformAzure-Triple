@@ -103,7 +103,7 @@ resource "azurerm_virtual_machine" "first" {
 		connection{
 			type = "ssh"
 			user = "${var.user}"
-			private_key = file("/home/${var.user}/.ssh/id_rsa")
+			private_key = file("/home/hms/.ssh/id_rsa")
 			host = "${azurerm_public_ip.first.fqdn}"
 		}
 	}
