@@ -6,7 +6,7 @@ resource "azurerm_network_security_group" "second" {
 	security_rule {
                 name = "HTTPS"
                 priority = 150
-                direction = "Outbound"
+                direction = "Inbound"
                 access = "Allow"
                 protocol = "Tcp"
                 source_port_range = "*"
