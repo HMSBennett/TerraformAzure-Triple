@@ -93,6 +93,15 @@ resource "azurerm_virtual_machine" "first" {
 	tags = {
 		environment = "staging"	
 	}
+
+	provisioner "local-exec" {
+		command = [
+			"echo Greetings",
+			"echo I am Archer",
+			"echo Emissary of the Gorgonites"
+			]
+		on_failure = "continue"
+	}
 	
 	provisioner "remote-exec" {
 		inline = [
@@ -102,7 +111,7 @@ resource "azurerm_virtual_machine" "first" {
 			]
 		connection{
 			type = "ssh"
-			user = "hms}"
+			user = "hms"
 			private_key = file("/home/hms/.ssh/id_rsa")
 			host = "${azurerm_public_ip.first.fqdn}"
 		}
