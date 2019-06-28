@@ -6,7 +6,7 @@ resource "azurerm_network_security_group" "first" {
 	security_rule {
 		name = "SSH"
         	priority = 100
-        	direction = "Outbound"
+        	direction = "Inbound"
         	access = "Allow"
         	protocol = "Tcp"
         	source_port_range = "*" 
