@@ -93,12 +93,6 @@ resource "azurerm_virtual_machine" "first" {
 	tags = {
 		environment = "staging"	
 	}
-
-	provisioner "local-exec" {
-		command = "echo Greetings, I am Archer, Emissary of the Gorgonites"
-
-		on_failure = "continue"
-	}
 	
 	provisioner "remote-exec" {
 		inline = [
@@ -113,4 +107,58 @@ resource "azurerm_virtual_machine" "first" {
 			host = "${azurerm_public_ip.first.fqdn}"
 		}
 	}
+
+	provisioner "local-exec" {
+		command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
+	}
+
+	provisioner "local-exec" {
+		command = "hostdns=$(az network public-ip show --name host-IP -g TripleSSH-Group | jq -r /'.dnsSettings.fqdn')"
+	}
+
+	provisioner "local-exec" {
+		command = "ssh-copy-id ${hostdns}"
+	}
+
+        provisioner "local-exec" {
+                command = "ssh ${hostdns}"
+        }
+
+        provisioner "local-exec" {
+                command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
+        }
+
+        provisioner "local-exec" {
+                command = "slavedns=$(az network public-ip show --name slave-IP -g TripleSSH-Group | jq -r /'.dnsSettings.fqdn')"
+        }
+
+
+        provisioner "local-exec" {
+                command = "ssh-copy-id ${slavedns}"
+        }
+
+        provisioner "local-exec" {
+                command = "ssh ${slavedns}"
+        }
+
+        provisioner "local-exec" {
+                command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
+        }
+
+        provisioner "local-exec" {
+                command = "serverdns=$(az network public-ip show --name server-IP -g TripleSSH-Group | jq -r /'.dnsSettings.fqdn')"
+        }
+
+
+        provisioner "local-exec" {
+                command = "ssh-copy-id ${serverdns}"
+        }
+
+        provisioner "local-exec" {
+                command = "exit"
+        }
+
+        provisioner "local-exec" {
+                command = "exit"
+        }
 }
