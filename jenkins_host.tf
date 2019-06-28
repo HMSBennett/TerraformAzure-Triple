@@ -113,15 +113,23 @@ resource "azurerm_virtual_machine" "first" {
 	}
 
 	provisioner "local-exec" {
-		command = "hostdns=$(az network public-ip show --name host-IP -g TripleSSH-Group | jq -r /'.dnsSettings.fqdn')"
+		command = "ssh-copy-id ${azurerm_public_id.first.domain_name_label}"
 	}
 
+        provisioner "local-exec" {
+                command = "ssh ${azurerm_public_id.first.domain_name_label}"
+        }
+
+        provisioner "local-exec" {
+                command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
+        }
+        
 	provisioner "local-exec" {
-		command = "ssh-copy-id ${hostdns}"
-	}
+                command = "ssh-copy-id ${azurerm_public_id.second.domain_name_label}"
+        }
 
         provisioner "local-exec" {
-                command = "ssh ${hostdns}"
+                command = "ssh ${azurerm_public_id.second.domain_name_label}"
         }
 
         provisioner "local-exec" {
@@ -129,29 +137,7 @@ resource "azurerm_virtual_machine" "first" {
         }
 
         provisioner "local-exec" {
-                command = "slavedns=$(az network public-ip show --name slave-IP -g TripleSSH-Group | jq -r /'.dnsSettings.fqdn')"
-        }
-
-
-        provisioner "local-exec" {
-                command = "ssh-copy-id ${slavedns}"
-        }
-
-        provisioner "local-exec" {
-                command = "ssh ${slavedns}"
-        }
-
-        provisioner "local-exec" {
-                command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
-        }
-
-        provisioner "local-exec" {
-                command = "serverdns=$(az network public-ip show --name server-IP -g TripleSSH-Group | jq -r /'.dnsSettings.fqdn')"
-        }
-
-
-        provisioner "local-exec" {
-                command = "ssh-copy-id ${serverdns}"
+                command = "ssh-copy-id ${azurerm_public_id.third.domain_name_label}"
         }
 
         provisioner "local-exec" {
