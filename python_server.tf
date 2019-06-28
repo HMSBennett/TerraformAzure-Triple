@@ -1,4 +1,4 @@
-resource "azurerm_network_security_group" "main" {
+resource "azurerm_network_security_group" "third" {
 	name = "${var.server}-NSG"
 	location = "${azurerm_resource_group.main.location}"
 	resource_group_name = "${azurerm_resource_group.main.name}"
@@ -17,19 +17,19 @@ resource "azurerm_network_security_group" "main" {
 
 }
 
-resource "azurerm_public_ip" "main" {
+resource "azurerm_public_ip" "third" {
 	name = "${var.server}-IP"
 	location = "${azurerm_resource_group.main.location}"
 	resource_group_name = "${azurerm_resource_group.main.name}"
 	allocation_method = "Static"
-	domain_name_label = "${var.name}-${formatdate("DDMMYYhhmmss",timestamp())}"
+	domain_name_label = "${var.user}-${formatdate("DDMMYYhhmmss",timestamp())}"
 
 	tags = {
 		environment = "Production"
 	}
 }
 
-resource "azurerm_network_interface" "main" {
+resource "azurerm_network_interface" "third" {
         name = "${var.server}-nic"
         location = "${azurerm_resource_group.main.location}"
         resource_group_name = "${azurerm_resource_group.main.name}"
@@ -38,15 +38,15 @@ resource "azurerm_network_interface" "main" {
                 name = "${var.server}-IP-Config"
                 subnet_id = "${azurerm_subnet.internal.id}"
                 private_ip_address_allocation = "Dynamic"
-		public_ip_address_id = "${azurerm_public_ip.main.id}"
+		public_ip_address_id = "${azurerm_public_ip.third.id}"
         }
 }
 
-resource "azurerm_virtual_machine" "main" {
+resource "azurerm_virtual_machine" "third" {
 	name = "${var.server}-vm"
 	location = "${azurerm_resource_group.main.location}"
 	resource_group_name = "${azurerm_resource_group.main.name}"
-	network_interface_ids = ["${azurerm_network_interface.main.id}"]
+	network_interface_ids = ["${azurerm_network_interface.third.id}"]
 	vm_size = "Standard_B1MS"
 
 	storage_image_reference {
@@ -57,7 +57,7 @@ resource "azurerm_virtual_machine" "main" {
 	}
 
 	storage_os_disk {
-		name = "myosdisk1"
+		name = "serverosdisk"
 		caching = "ReadWrite"
 		create_option = "FromImage"
 		managed_disk_type = "Standard_LRS"
@@ -84,15 +84,13 @@ resource "azurerm_virtual_machine" "main" {
 	
 	provisioner "remote-exec" {
 		inline = [
-			"git clone https://github.com/HMSBennett/Jenkins",
-			"cd Jenkins",
-			"./jenkinsInstall.sh",
+			"echo Third VM Runs ---------------------------------------------"
 			]
 		connection{
 			type = "ssh"
 			user = "${var.user}"
 			private_key = file("/home/${var.user}/.ssh/id_rsa")
-			host = "${azurerm_public_ip.main.fqdn}"
+			host = "${azurerm_public_ip.third.fqdn}"
 		}
 	}
 }
