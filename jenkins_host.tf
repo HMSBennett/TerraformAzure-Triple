@@ -77,7 +77,7 @@ resource "azurerm_virtual_machine" "first" {
 
 	os_profile {
 		computer_name = "${var.host}-machine"
-		admin_username = "${var.user}"
+		admin_username = "hms"
 		admin_password = "${var.password}"
 	}
 
@@ -85,7 +85,7 @@ resource "azurerm_virtual_machine" "first" {
 		disable_password_authentication = false
 		
 		ssh_keys {
-			path = "/home/${var.user}/.ssh/authorized_keys"
+			path = "/home/hms/.ssh/authorized_keys"
 			key_data = "${file("~/.ssh/id_rsa.pub")} "
 		}
 	}
@@ -102,7 +102,7 @@ resource "azurerm_virtual_machine" "first" {
 			]
 		connection{
 			type = "ssh"
-			user = "${var.user}"
+			user = "hms}"
 			private_key = file("/home/hms/.ssh/id_rsa")
 			host = "${azurerm_public_ip.first.fqdn}"
 		}
