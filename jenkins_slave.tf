@@ -27,6 +27,18 @@ resource "azurerm_network_security_group" "second" {
                 destination_address_prefix = "*"
 	}
 
+        security_rule {
+                name = "Python"
+                priority = 200
+                direction = "Outbound"
+                access = "Allow"
+                protocol = "Tcp"
+                source_port_range = "*"
+                destination_port_range = "8088"
+                source_address_prefix = "*"
+                destination_address_prefix = "*"
+        }
+
 }
 
 resource "azurerm_public_ip" "second" {
@@ -45,7 +57,7 @@ resource "azurerm_network_interface" "second" {
         name = "${var.slave}-nic"
         location = "${azurerm_resource_group.main.location}"
         resource_group_name = "${azurerm_resource_group.main.name}"
-        network_security_group_id = "${azurerm_network_security_group.second.name}"
+        network_security_group_id = "${azurerm_network_security_group.second.id}"
 
 
         ip_configuration {

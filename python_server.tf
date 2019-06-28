@@ -4,6 +4,30 @@ resource "azurerm_network_security_group" "third" {
 	resource_group_name = "${azurerm_resource_group.main.name}"
 
 	security_rule {
+                name = "SSH"
+                priority = 100
+                direction = "Outbound"
+                access = "Allow"
+                protocol = "Tcp"
+                source_port_range = "*"
+                destination_port_range = "22"
+                source_address_prefix = "*"
+                destination_address_prefix = "*"
+        }
+
+        security_rule {
+                name = "HTTPS"
+                priority = 150
+                direction = "Outbound"
+                access = "Allow"
+                protocol = "Tcp"
+                source_port_range = "*"
+                destination_port_range = "8080"
+                source_address_prefix = "*"
+                destination_address_prefix = "*"
+        }
+
+        security_rule {
                 name = "Server"
                 priority = 200
                 direction = "Outbound"
@@ -33,7 +57,7 @@ resource "azurerm_network_interface" "third" {
         name = "${var.server}-nic"
         location = "${azurerm_resource_group.main.location}"
         resource_group_name = "${azurerm_resource_group.main.name}"
-        network_security_group_id = "${azurerm_network_security_group.first.name}"
+        network_security_group_id = "${azurerm_network_security_group.third.id}"
 
         ip_configuration {
                 name = "${var.server}-IP-Config"
