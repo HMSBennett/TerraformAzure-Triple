@@ -11,13 +11,13 @@ variable "password" {
 }
 
 variable "host" {
-        default = "TripleSSH-Host"
+        default = "host"
 }
 
 variable "slave" {
-        default = "TripleSSH-Slave"
+        default = "slave"
 }
 
 variable "server" {
-        default = "TripleSSH-Server"
+        default = "server"
 }

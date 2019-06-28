@@ -34,7 +34,7 @@ resource "azurerm_public_ip" "second" {
 	location = "${azurerm_resource_group.main.location}"
 	resource_group_name = "${azurerm_resource_group.main.name}"
 	allocation_method = "Static"
-	domain_name_label = "${var.user}-${formatdate("DDMMYYhhmmss",timestamp())}"
+	domain_name_label = "${var.user}${var.slave}-${formatdate("DDMMYYhhmmss",timestamp())}"
 
 	tags = {
 		environment = "Production"
@@ -45,6 +45,8 @@ resource "azurerm_network_interface" "second" {
         name = "${var.slave}-nic"
         location = "${azurerm_resource_group.main.location}"
         resource_group_name = "${azurerm_resource_group.main.name}"
+        network_security_group_id = "${azurerm_network_security_group.second.name}"
+
 
         ip_configuration {
                 name = "${var.slave}-IP-Config"
