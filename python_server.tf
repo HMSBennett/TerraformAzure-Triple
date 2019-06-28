@@ -6,7 +6,7 @@ resource "azurerm_network_security_group" "third" {
 	security_rule {
                 name = "Server"
                 priority = 200
-                direction = "Outbound"
+                direction = "Inbound"
                 access = "Allow"
                 protocol = "Tcp"
                 source_port_range = "*"
