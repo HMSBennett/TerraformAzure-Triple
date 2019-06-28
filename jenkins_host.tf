@@ -95,11 +95,8 @@ resource "azurerm_virtual_machine" "first" {
 	}
 
 	provisioner "local-exec" {
-		command = [
-			"echo Greetings",
-			"echo I am Archer",
-			"echo Emissary of the Gorgonites"
-			]
+		command = "echo Greetings, I am Archer, Emissary of the Gorgonites"
+
 		on_failure = "continue"
 	}
 	
