@@ -1,5 +1,5 @@
 resource "azurerm_network_security_group" "main" {
-	name = "${var.prefix.host}-NSG"
+	name = "${var.host}-NSG"
 	location = "${azurerm_resource_group.main.location}"
 	resource_group_name = "${azurerm_resource_group.main.name}"
 
@@ -30,11 +30,11 @@ resource "azurerm_network_security_group" "main" {
 }
 
 resource "azurerm_public_ip" "main" {
-	name = "${var.prefix.host}-IP"
+	name = "${var.host}-IP"
 	location = "${azurerm_resource_group.main.location}"
 	resource_group_name = "${azurerm_resource_group.main.name}"
 	allocation_method = "Static"
-	domain_name_label = "${var.prefix.name}-${formatdate("DDMMYYhhmmss",timestamp())}"
+	domain_name_label = "${var.name}-${formatdate("DDMMYYhhmmss",timestamp())}"
 
 	tags = {
 		environment = "Production"
@@ -42,12 +42,12 @@ resource "azurerm_public_ip" "main" {
 }
 
 resource "azurerm_network_interface" "main" {
-        name = "${var.prefix.host}-nic"
+        name = "${var.host}-nic"
         location = "${azurerm_resource_group.main.location}"
         resource_group_name = "${azurerm_resource_group.main.name}"
 
         ip_configuration {
-                name = "${var.prefix.host}-IP-Config"
+                name = "${var.host}-IP-Config"
                 subnet_id = "${azurerm_subnet.internal.id}"
                 private_ip_address_allocation = "Dynamic"
 		public_ip_address_id = "${azurerm_public_ip.main.id}"
@@ -55,7 +55,7 @@ resource "azurerm_network_interface" "main" {
 }
 
 resource "azurerm_virtual_machine" "main" {
-	name = "${var.prefix.host}-vm"
+	name = "${var.host}-vm"
 	location = "${azurerm_resource_group.main.location}"
 	resource_group_name = "${azurerm_resource_group.main.name}"
 	network_interface_ids = ["${azurerm_network_interface.main.id}"]
@@ -76,16 +76,16 @@ resource "azurerm_virtual_machine" "main" {
 	}
 
 	os_profile {
-		computer_name = "${var.prefix.host}-machine"
-		admin_username = "${var.prefix.user}"
-		admin_password = "${var.prefix.password}"
+		computer_name = "${var.host}-machine"
+		admin_username = "${var.user}"
+		admin_password = "${var.password}"
 	}
 
 	os_profile_linux_config {
 		disable_password_authentication = false
 		
 		ssh_keys {
-			path = "/home/${var.prefix.user}/.ssh/authorized_keys"
+			path = "/home/${var.user}/.ssh/authorized_keys"
 			key_data = "${file("~/.ssh/id_rsa.pub")} "
 		}
 	}
@@ -102,8 +102,8 @@ resource "azurerm_virtual_machine" "main" {
 			]
 		connection{
 			type = "ssh"
-			user = "${var.prefix.user}"
-			private_key = file("/home/${var.prefix.user}/.ssh/id_rsa")
+			user = "${var.user}"
+			private_key = file("/home/${var.user}/.ssh/id_rsa")
 			host = "${azurerm_public_ip.main.fqdn}"
 		}
 	}

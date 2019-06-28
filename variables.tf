@@ -1,8 +1,23 @@
 variable "prefix" {
 	default = "TripleSSH"
-	user = "hms"
-	password = "guffin123!"
-	host = "TripleSSH-Host"
-	slave = "TripleSSH-Slave"
-	server = "TripleSSH-Server"
+}
+
+variable "user" {
+	default = "hms"
+}
+
+variable "password" {
+        default = "guffin123!"
+}
+
+variable "host" {
+        default = "TripleSSH-Host"
+}
+
+variable "slave" {
+        default = "TripleSSH-Slave"
+}
+
+variable "server" {
+        default = "TripleSSH-Server"
 }
