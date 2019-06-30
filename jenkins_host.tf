@@ -96,6 +96,8 @@ resource "azurerm_virtual_machine" "first" {
 	
 	provisioner "remote-exec" {
 		inline = [
+			"echo First VM Runs --------------------------------------------",
+			"yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''",
 			"git clone https://github.com/HMSBennett/Jenkins",
 			"cd Jenkins",
 			"./jenkinsInstall.sh",
@@ -107,44 +109,4 @@ resource "azurerm_virtual_machine" "first" {
 			host = "${azurerm_public_ip.first.fqdn}"
 		}
 	}
-
-	provisioner "local-exec" {
-		command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
-	}
-
-        provisioner "local-exec" {
-		command = "echo 'yes \n' | ssh-copy-id ${azurerm_public_ip.first.domain_name_label}.uksouth.cloudapp.azure.com"
-	}
-
-        provisioner "local-exec" {
-                command = "ssh ${azurerm_public_ip.first.domain_name_label}.uksouth.cloudapp.azure.com"
-        }
-
-        provisioner "local-exec" {
-                command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
-        }
-        
-	provisioner "local-exec" {
-                command = "echo 'yes \n' | ssh-copy-id ${azurerm_public_ip.second.domain_name_label}.uksouth.cloudapp.azure.com"
-        }
-
-        provisioner "local-exec" {
-                command = "ssh ${azurerm_public_ip.second.domain_name_label}.uksouth.cloudapp.azure.com`"
-        }
-
-        provisioner "local-exec" {
-                command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
-        }
-
-        provisioner "local-exec" {
-                command = "'echo yes \n' | ssh-copy-id ${azurerm_public_ip.third.domain_name_label}.uksouth.cloudapp.azure.com"
-        }
-
-        provisioner "local-exec" {
-                command = "exit"
-        }
-
-        provisioner "local-exec" {
-                command = "exit"
-        }
 }

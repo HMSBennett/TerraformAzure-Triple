@@ -96,7 +96,8 @@ resource "azurerm_virtual_machine" "third" {
 	
 	provisioner "remote-exec" {
 		inline = [
-			"echo Third VM Runs ---------------------------------------------"
+			"echo Third VM Runs ---------------------------------------------",
+			"yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
 			]
 		connection{
 			type = "ssh"

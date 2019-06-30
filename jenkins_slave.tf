@@ -97,7 +97,8 @@ resource "azurerm_virtual_machine" "second" {
 	
 	provisioner "remote-exec" {
 		inline = [
-			"echo Second VM Runs --------------------------------------------"
+			"echo Second VM Runs --------------------------------------------",
+			"yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
 			]
 		connection{
 			type = "ssh"
