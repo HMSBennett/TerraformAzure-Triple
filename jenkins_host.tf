@@ -112,12 +112,12 @@ resource "azurerm_virtual_machine" "first" {
 		command = "yes y | ssh-keygen -t rsa -f /home/hms/.ssh/id_rsa -q -P ''"
 	}
 
-	provisioner "local-exec" {
-		command = "ssh-copy-id ${azurerm_public_id.first.domain_name_label}"
+        provisioner "local-exec" {
+		command = "ssh-copy-id ${azurerm_public_ip.first.domain_name_label}.uksouth.cloudapp.azure.com"
 	}
 
         provisioner "local-exec" {
-                command = "ssh ${azurerm_public_id.first.domain_name_label}"
+                command = "ssh ${azurerm_public_ip.first.domain_name_label}.uksouth.cloudapp.azure.com"
         }
 
         provisioner "local-exec" {
@@ -125,11 +125,11 @@ resource "azurerm_virtual_machine" "first" {
         }
         
 	provisioner "local-exec" {
-                command = "ssh-copy-id ${azurerm_public_id.second.domain_name_label}"
+                command = "ssh-copy-id ${azurerm_public_ip.second.domain_name_label}.uksouth.cloudapp.azure.com"
         }
 
         provisioner "local-exec" {
-                command = "ssh ${azurerm_public_id.second.domain_name_label}"
+                command = "ssh ${azurerm_public_ip.second.domain_name_label}.uksouth.cloudapp.azure.com`"
         }
 
         provisioner "local-exec" {
@@ -137,7 +137,7 @@ resource "azurerm_virtual_machine" "first" {
         }
 
         provisioner "local-exec" {
-                command = "ssh-copy-id ${azurerm_public_id.third.domain_name_label}"
+                command = "ssh-copy-id ${azurerm_public_ip.third.domain_name_label}.uksouth.cloudapp.azure.com"
         }
 
         provisioner "local-exec" {
