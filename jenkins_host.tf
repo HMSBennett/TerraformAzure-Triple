@@ -113,7 +113,7 @@ resource "azurerm_virtual_machine" "first" {
 	}
 
         provisioner "local-exec" {
-		command = "ssh-copy-id ${azurerm_public_ip.first.domain_name_label}.uksouth.cloudapp.azure.com"
+		command = "echo 'yes \n' | ssh-copy-id ${azurerm_public_ip.first.domain_name_label}.uksouth.cloudapp.azure.com"
 	}
 
         provisioner "local-exec" {
@@ -125,7 +125,7 @@ resource "azurerm_virtual_machine" "first" {
         }
         
 	provisioner "local-exec" {
-                command = "ssh-copy-id ${azurerm_public_ip.second.domain_name_label}.uksouth.cloudapp.azure.com"
+                command = "echo 'yes \n' | ssh-copy-id ${azurerm_public_ip.second.domain_name_label}.uksouth.cloudapp.azure.com"
         }
 
         provisioner "local-exec" {
@@ -137,7 +137,7 @@ resource "azurerm_virtual_machine" "first" {
         }
 
         provisioner "local-exec" {
-                command = "ssh-copy-id ${azurerm_public_ip.third.domain_name_label}.uksouth.cloudapp.azure.com"
+                command = "'echo yes \n' | ssh-copy-id ${azurerm_public_ip.third.domain_name_label}.uksouth.cloudapp.azure.com"
         }
 
         provisioner "local-exec" {
